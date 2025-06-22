@@ -1,17 +1,15 @@
 import streamlit as st
 import pandas as pd
-import joblib  # using joblib to load model
+import joblib
 
-# Load the trained model pipeline
+# Load the model (update filename)
 model = joblib.load('student_performance_model_joblib.pkl')
 
-# Streamlit UI setup
 st.set_page_config(page_title="Student Performance Predictor", layout="centered")
 st.title("🎓 Student Performance Index Predictor")
-
 st.markdown("Enter the student details below to predict their Performance Index:")
 
-# Input fields
+# Input widgets
 hours_studied = st.number_input("Hours Studied", min_value=0.0, max_value=24.0, value=5.0)
 previous_scores = st.number_input("Previous Scores", min_value=0.0, max_value=100.0, value=70.0)
 sleep_hours = st.number_input("Sleep Hours", min_value=0.0, max_value=24.0, value=7.0)
@@ -22,7 +20,7 @@ weekly_study_hours = st.number_input("Weekly Study Hours", min_value=0.0, max_va
 parental_support = st.selectbox("Parental Support", options=["Yes", "No"])
 health_status = st.selectbox("Health Status", options=["Good", "Average", "Poor"])
 
-# Create DataFrame for prediction
+# Build DataFrame for prediction
 input_df = pd.DataFrame({
     'Hours Studied': [hours_studied],
     'Previous Scores': [previous_scores],
@@ -35,7 +33,7 @@ input_df = pd.DataFrame({
     'Health Status': [health_status]
 })
 
-# Predict when button is clicked
+# Predict on button click
 if st.button("Predict Performance Index"):
     prediction = model.predict(input_df)[0]
     st.success(f"📊 Predicted Performance Index: **{prediction:.2f}**")
